@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Minecraft Startup Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  
+    <link rel="stylesheet" href="/lib/highlight.js/styles/default.min.css">
+    <script src="/lib/highlight.js/hightlight.min.js"></script>
+    
+    <script src="/lib/highlight.js/languages/bash.min.js"></script>
+    <script src="/lib/highlight.js/languages/dos.min.js"></script>
+    <script>
+    hljs.highlightAll();
+    </script>
+  </head>
+<body>
+  <h1>Minecraft Server Startup Script</h1>
+  <label id="inputFileName">File name:
+  <input type="string" id="filename" value="server.jar", oninput="generateScript()" autofocus>
+</label>
+  <div>
+    RAM: 
+    <input type="range" id="ram" min="128" max="131067" value="1024", oninput="generateScript()">
+    <a id="bytesvalue"></a>
+  </div>
+  <label for="isGUI">
+    GUI: 
+    <input type="checkbox", id="guicheck", onclick='generateScript()'>
+  </label>
+  <button onclick="copy()"><img src="/media/icons/copy.svg" draggable="false" title="Copy the script"></button>
+  <pre> <!-- pre-generated code by generateScript() with highlight.js => batch,bash -->
+  <code id="scriptOutput", class="language-bash"></code>
+  </pre>
+  <button id="downloadButton"> <!-- Download buttons -->
+    <img src="/media/icons/download.svg" draggable="false" title="Save the script" src="save" onclick="downloadContents()">
+  </button>
+  <script>generateScript()</script>
+</body>
+</html>

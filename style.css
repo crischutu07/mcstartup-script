@@ -1,0 +1,29 @@
+input[type="range"] {
+  width: 50%;
+}
+#scriptOutput {
+  width: auto;
+  word-wrap: break-word;
+}
+
+body {
+  background-color: #1a1b1e;
+  font-family: monospace;
+}
+label, div {
+  color: #c1c2c5;
+}
+h1 {
+  color: #dbdbdb;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+#inputFileName {
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+#bytesvalue {
+  color:#ffffff
+}
