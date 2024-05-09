@@ -79,7 +79,7 @@ function generateScript() {
   hljs.highlightAll();
 }
 let downloadButton = document.getElementById('downloadButton');
-downloadButton.addEventListener('click', function() {
+function downloadContents(){
   const blob = new Blob([downloadButton.textContent], { type: 'text/plain' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
@@ -88,4 +88,4 @@ downloadButton.addEventListener('click', function() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-})
+}
