@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   
-    <link rel="stylesheet" href="/lib/highlight.js/styles/default.min.css">
-    <script src="/lib/highlight.js/hightlight.min.js"></script>
-    
-    <script src="/lib/highlight.js/languages/bash.min.js"></script>
-    <script src="/lib/highlight.js/languages/dos.min.js"></script>
+    <link rel="stylesheet" href="lib/highlight.js/styles/default.min.css">
+    <script src="lib/highlight.js/hightlight.min.js"></script>
+    <script src="lib/highlight.js/languages/bash.min.js"></script>
+    <script src="lib/highlight.js/languages/dos.min.js"></script>
     <script>
     hljs.highlightAll();
     </script>
@@ -30,12 +29,12 @@
     GUI: 
     <input type="checkbox", id="guicheck", onclick='generateScript()'>
   </label>
-  <button onclick="copy()"><img src="/media/icons/copy.svg" draggable="false" title="Copy the script"></button>
+  <button onclick="copy()"><img src="media/icons/copy.svg" draggable="false" title="Copy the script"></button>
   <pre> <!-- pre-generated code by generateScript() with highlight.js => batch,bash -->
   <code id="scriptOutput", class="language-bash"></code>
   </pre>
   <button id="downloadButton"> <!-- Download buttons -->
-    <img src="/media/icons/download.svg" draggable="false" title="Save the script" src="save" onclick="downloadContents()">
+    <img src="media/icons/download.svg" draggable="false" title="Save the script" src="save" onclick="downloadContents()">
   </button>
   <script>generateScript()</script>
 </body>
