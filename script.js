@@ -13,27 +13,53 @@
     return int + " MB";
   }
 }*/
-
 /*
 // if (document.getElementById('filename').split('.').pop() !== "jar" ){
 //   console.log(`required jar`)
 // } else {
 //   console(true)
 // }*/
-
-var values = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5, 22, 22.5, 23, 23.5, 24];
 const input = document.getElementById('ram');
-input.addEventListener('input', () => {
-  memory = (values[input.value - 1] * 1024).toFixed(0);
-})
 
-function generateScript() {
-  var flags = [];
+const values = [];
+for (let i = 1; i < 25; i += 0.5) {
+  if (i === 24.5) {
+    break;
+  } else {
+    values.push(Number(i))
+  }
+}
 
-  var flag = document.getElementById("flags").value
-  var gui = document.getElementById('guicheck').checked;
-  var ptl = document.getElementById('ptl').checked;
-  var filename = document.getElementById('filename').value || 'server.jar';
+let memory;
+let commandOutput;
+let modOutput;
+let rawOutput = [];
+const scriptOutput = document.getElementById('scriptOutput');
+const langType = document.getElementById('lang-type');
+let lang;
+
+function formatHighlight(value){
+  if (value){
+    scriptOutput.innerText = value.toString();
+  }
+  scriptOutput.removeAttribute("data-highlighted")
+  console.warn = () => {};
+  hljs.highlightAll();
+}
+Array.prototype.move = function(x, y){
+  this.splice(y, 0, this.splice(x, 1)[0]);
+  return this;
+};
+
+async function generateScript() {
+  let flags = [];
+  memory = (values[input.value] * 1024).toFixed(0);
+
+  const flag = document.getElementById("flags").value;
+  const gui = document.getElementById('guicheck').checked;
+  const ptl = document.getElementById('ptl').checked;
+  const loop = document.getElementById('loop').checked;
+  const filename = document.getElementById('filename').value || 'server.jar';
   document.getElementById('bytesvalue').innerText = `${values[input.value]} GB`
   if (ptl) {
     flags.push(`-Xms${(memory * 0.85)?.toFixed(0)}M`, `-Xmx${(memory * 0.85)?.toFixed(0)}M`)
@@ -57,7 +83,7 @@ function generateScript() {
       )
       break;
     case "Akiar":
-      var _a = [
+      const _a = [
         "--add-modules=jdk.incubator.vector",
         "-XX:UseG1GC",
         "-XX:+ParallelRefProcEnabled",
@@ -75,7 +101,7 @@ function generateScript() {
         "-XX:MaxTenuringThreshold=1",
         "-Dusing.aikars.flags=https://mcflags.emc.gs",
         "-Daikars.new.flags=true",
-      ]
+      ];
       if (memory >= 12884) {
         flags.push(..._a, ...Array.from([
           "-XX:G1NewSizePercent=40",
@@ -94,23 +120,81 @@ function generateScript() {
       break;
   }
   flags.push(`--jar ${filename}`)
+  commandOutput = `java ${flags.join(' ')}`;
   if (!gui) flags.push("--nogui")
-  document.getElementById("scriptOutput").textContent = `java ${flags.join(' ')}`
-  document.getElementById("scriptOutput").removeAttribute("data-highlighted")
-  hljs.highlightAll();
+  switch (langType.value) {
+    case "java":
+      lang = "java";
+      flags = ["java",...flags]
+      break;
+    case "bash":
+      lang = "bash";
+      if(loop){
+        flags = [
+          "#!/usr/bin/env sh",
+          "\nwhile true; do\n",
+          "java",
+          ...flags,
+          "\n",
+          "echo \"Press Ctrl + C to stop.\"",
+          "\ndone"
+        ]
+      } else {
+        flags = ["#!/usr/bin/env sh","\n","java",...flags]
+      }
+      scriptOutput.classList.replace(scriptOutput.classList[0], 'language-bash');
+      break;
+    case "dos":
+      lang = "dos";
+      if(loop){
+        flags = [
+          "@echo off",
+          "\n:loop",
+          "\n",
+          "java",
+          ...flags,
+          "\n",
+          "echo Press Ctrl + C to stop.",
+          "\ngoto :loop"
+        ]
+      } else {
+        flags = ["@echo off\n","java",...flags]
+      }
+      scriptOutput.classList.replace(scriptOutput.classList[0], 'language-dos');
+      break;
+  }
+  modOutput = flags.join(' ')
+  rawOutput = modOutput;
+  formatHighlight(modOutput);
 }
 
 
 let downloadButton = document.getElementById('downloadButton');
-// TODO: Fix download button doesnt doesnt in blob contents
+let copyButton = document.getElementById('copyButton');
+copyButton.addEventListener('click', () => {
+  navigator.clipboard.writeText(commandOutput).then(() => {
+    alert("Copied the script!")
+    console.log("Copied the following values:");
+    console.info(commandOutput)
+  });
+})
 downloadButton.addEventListener("click", () => {
   const blob = new Blob(
-    [document.getElementById("scriptOutput").textContent],
-    { type: 'text/plain' }
+    [modOutput],
+    {type: 'text/plain'}
   );
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'start.sh';
+  switch (lang){
+    case "bash":
+      link.download = 'start.sh'
+      break
+    case "dos":
+      link.download = 'start.bat'
+      break
+    default:
+      break
+  }
   link.style.display = 'none';
   document.body.appendChild(link);
   link.click();
