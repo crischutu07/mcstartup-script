@@ -1,42 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Minecraft Startup Generator</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="lib/highlight.js/styles/default.min.css">
-    <script src="lib/highlight.js/hightlight.min.js"></script>
-    <script src="lib/highlight.js/languages/bash.min.js"></script>
-    <script src="lib/highlight.js/languages/dos.min.js"></script>
-    <script>
+  <title>Minecraft Startup Generator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dos.min.js"></script>
+  <script>
     hljs.highlightAll();
-    </script>
-    <script src="../js/script.js"></script>
-  </head>
+  </script>
+  <script src="../js/script.js"></script>
+</head>
+
 <body>
   <h1>Minecraft Server Startup Script</h1>
-  <label id="inputFileName">File name:
-  <input type="string" id="filename" value="server.jar", oninput="generateScript()" autofocus>
-</label>
-  <div>
-    RAM: 
-    <input draggable="false" type="range" id="ram" min="128" max="131067" value="1024", oninput="generateScript()">
+  <label id="name">File name:
+    <input type="string" id="filename" value="server.jar" , oninput="generateScript()">
+  </label>
+  <div class="memory">
+    RAM:
+    <input draggable="false" type="range" min="0" max="46" step="0" value="1" , oninput="generateScript()" id="ram">
     <span id="bytesvalue"></span>
   </div>
-  <label for="isGUI">
-    GUI: 
-    <input type="checkbox", id="guicheck", onclick='generateScript()'>
+  <label id="pterodactyl">
+    Pterodactyl
+    <input type="checkbox" id="ptl" onclick='generateScript()'>
   </label>
+  <label for="isGUI" id="gui">
+    GUI:
+    <input type="checkbox" , id="guicheck" , onclick='generateScript()'>
+  </label>
+  <div class="flagstype">
+    <label for="flags">
+      <select id="flags" onchange="generateScript()">
+        <option value="None">None</option>
+        <option value="Proxy">Proxy (Velocity/Bungeecord)</option>
+        <option value="Akiar" selected>Akiar's Flags</option>
+      </select>
+    </label>
+  </div>
   <button onclick="copy()"><img src="media/icons/copy.svg" draggable="false" title="Copy the script"></button>
   <pre> <!-- pre-generated code by generateScript() with highlight.js => batch,bash -->
-  <code id="scriptOutput", class="language-bash"></code>
+    <code id="scriptOutput" , class="language-bash"></code>
   </pre>
+
   <button id="downloadButton"> <!-- Download buttons -->
-    <img src="media/icons/download.svg" draggable="false" title="Save the script" src="save" onclick="downloadContents()">
+    <img src="media/icons/download.svg" draggable="false" title="Save the script" src="save"
+      onclick="downloadContents()">
   </button>
+  <script src="script.js"></script>
   <script>generateScript()</script>
 </body>
+
 </html>
